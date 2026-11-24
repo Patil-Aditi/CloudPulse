@@ -38,6 +38,15 @@ pipeline {
                 echo 'Docker is accessible from Jenkins'
             }
         }
+
+
+        stage('Docker Image Build') {
+            steps {
+                bat 'docker build -t cloudpulse:latest .'
+                echo 'CloudPulse Docker image built successfully'
+            }
+        }
+
     }
 
     post {
