@@ -30,8 +30,6 @@ pipeline {
                 echo 'Python syntax validation successful'
             }
         }
-    }
-
 
         stage('Docker Environment Check') {
             steps {
@@ -40,7 +38,7 @@ pipeline {
                 echo 'Docker is accessible from Jenkins'
             }
         }
-
+    }
 
     post {
         success {
