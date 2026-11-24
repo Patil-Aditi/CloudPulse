@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CloudPulse | Monitoring Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                <h2>CloudPulse</h2>
+            </div>
+
+            <p class="menu-label">MAIN MENU</p>
+
+            <nav>
+                <a href="#" class="nav-link active">▦ Overview</a>
+                <a href="#services" class="nav-link">◈ Services</a>
+                <a href="#monitoring" class="nav-link">◉ Monitoring</a>
+                <a href="#incidents" class="nav-link">⚠ Incidents</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <span class="online-dot"></span>
+                Local Environment
+                <p>CloudPulse v1.0</p>
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <h1>Dashboard Overview</h1>
+                    <p>Monitor your application infrastructure.</p>
+                </div>
+
+                <button id="refreshBtn" class="refresh-btn">
+                    ↻ Refresh
+                </button>
+            </header>
+
+
+            <!-- Overall Status -->
+            <section class="welcome-card">
+
+                <div>
+                    <span class="small-label">SYSTEM STATUS</span>
+                    <h2 id="overallStatus">Checking...</h2>
+                    <p>Your CloudPulse API health overview</p>
+                </div>
+
+                <div class="status-indicator">
+                    <span class="online-dot"></span>
+                    <span>Local Monitoring</span>
+                </div>
+
+            </section>
+
+
+            <!-- Statistics -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <p>Total Services</p>
+                    <h2 id="totalServices">--</h2>
+                    <span>Configured services</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Healthy</p>
+                    <h2 class="green" id="healthyServices">--</h2>
+                    <span>Running successfully</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Down</p>
+                    <h2 class="red" id="downServices">--</h2>
+                    <span>Failed services</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Not Connected</p>
+                    <h2 class="yellow" id="pendingServices">--</h2>
+                    <span>Integration pending</span>
+                </div>
+
+            </section>
+
+
+            <!-- Services -->
+            <section class="content-section" id="services">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Service Health</h2>
+                        <p>Current status of your services</p>
+                    </div>
+                    <span class="live-label">● LIVE DATA</span>
+                </div>
+
+                <div class="service-grid" id="serviceGrid">
+
+                    <p>Loading services...</p>
+
+                </div>
+
+            </section>
+
+
+            <!-- Monitoring -->
+            <section class="content-section" id="monitoring">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Application Monitoring</h2>
+                        <p>Runtime information</p>
+                    </div>
+                </div>
+
+                <div class="monitor-card">
+
+                    <div>
+                        <p>Application Uptime</p>
+                        <h2 id="uptime">--</h2>
+                    </div>
+
+                    <div>
+                        <p>Last Checked</p>
+                        <h3 id="lastChecked">--</h3>
+                    </div>
+
+                    <div>
+                        <p>Backend</p>
+                        <h3>Python Flask</h3>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Incidents -->
+            <section class="content-section" id="incidents">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Recent Incidents</h2>
+                        <p>Service availability information</p>
+                    </div>
+                </div>
+
+                <div class="incident-card" id="incidentList">
+                    <p>No incidents recorded yet.</p>
+                </div>
+
+            </section>
+
+            <!-- Notification History -->
+            <section class="notification-section">
+            
+                <h2>Notification History</h2>
+            
+                <div id="notificationList">
+                    <p>Loading notifications...</p>
+                </div>
+            
+            </section>
+
+
+            <footer>
+                CloudPulse © 2026 | Smart Cloud Monitoring Platform
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
