@@ -205,8 +205,14 @@ def dashboard():
     # Check Test Service health
     try:
         response = requests.get(
-            "http://127.0.0.1:5001/health",
+            "http://test-service:5001/health",
             timeout=3
+        )
+
+        print(
+            "Test Service HTTP Status:",
+            response.status_code,
+            flush=True
         )
 
         if response.status_code == 200:
@@ -214,11 +220,17 @@ def dashboard():
         else:
             test_status = "Down"
 
-    except requests.RequestException:
+    except requests.RequestException as error:
+
+        print(
+            "Test Service Error:",
+            repr(error),
+            flush=True
+        )
+
         test_status = "Down"
 
-
-    # Check whether an incident is already open
+    # Check open incident
     conn = sqlite3.connect(DATABASE)
 
     open_incident = conn.execute(
@@ -231,8 +243,7 @@ def dashboard():
 
     conn.close()
 
-
-    # Incident detection and notification logic
+    # Incident detection
     if test_status == "Down":
 
         if open_incident is None:
@@ -257,7 +268,6 @@ def dashboard():
                 "Recovery"
             )
 
-
     # Add Test Service
     services.append({
         "name": "Test Service",
@@ -266,11 +276,9 @@ def dashboard():
         "description": "External Flask test service"
     })
 
-
     # Get incident and notification history
     incidents = get_incidents()
     notifications = get_notifications()
-
 
     # Calculate overall status
     overall_status = (
@@ -278,7 +286,6 @@ def dashboard():
         if any(service["status"] == "Down" for service in services)
         else "Operational"
     )
-
 
     # Return dashboard data
     return jsonify({
@@ -298,7 +305,7 @@ if __name__ == "__main__":
     init_db()
 
     app.run(
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=5000,
         debug=True
     )
