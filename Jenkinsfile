@@ -32,6 +32,16 @@ pipeline {
         }
     }
 
+
+        stage('Docker Environment Check') {
+            steps {
+                bat 'docker --version'
+                bat 'docker info --format "{{.ServerVersion}}"'
+                echo 'Docker is accessible from Jenkins'
+            }
+        }
+
+
     post {
         success {
             echo 'CloudPulse CI Pipeline completed successfully!'
