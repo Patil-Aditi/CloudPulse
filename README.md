@@ -2,7 +2,9 @@
 
 CloudPulse is a Python Flask-based web application designed to monitor service health, detect failures, track incidents, and maintain notification history through a centralized dashboard.
 
-The project uses Docker and Docker Compose to run the application and its test service in separate containers. The goal is to build a practical cloud monitoring platform while learning real-world Cloud and DevOps practices.
+The project uses Docker and Docker Compose to run the application and its test service in separate containers. Jenkins is integrated to automate source code checkout, Python validation, Docker environment verification, and Docker image building.
+
+This project demonstrates practical Cloud and DevOps concepts through hands-on implementation.
 
 ## 🎯 Project Objectives
 
@@ -12,7 +14,7 @@ The project uses Docker and Docker Compose to run the application and its test s
 - Generate alerts when services go down.
 - Track service recovery.
 - Display monitoring information through a centralized dashboard.
-- Implement containerization and DevOps practices.
+- Implement containerization and CI practices.
 
 ## 🚀 Features Implemented
 
@@ -26,57 +28,69 @@ The project uses Docker and Docker Compose to run the application and its test s
 - **Docker Containerization:** Runs CloudPulse and Test Service in separate containers.
 - **Docker Compose:** Manages multiple containers through a single configuration file.
 - **Docker Networking:** Enables communication between containers using service names.
-- **Docker Ignore:** Excludes unnecessary files from the Docker build context.
+- **Jenkins CI Pipeline:** Automates source code checkout, Python setup, code validation, Docker verification, and image building.
 
 ## 🛠️ Technology Stack
 
-| Category                | Technologies          |
-| ----------------------- | --------------------- |
-| Backend                 | Python, Flask         |
-| Frontend                | HTML, CSS, JavaScript |
-| Database                | SQLite                |
-| HTTP Monitoring         | Python Requests       |
-| Containerization        | Docker                |
-| Container Orchestration | Docker Compose        |
-| Version Control         | Git, GitHub           |
+| Category             | Technologies          |
+| -------------------- | --------------------- |
+| Backend              | Python, Flask         |
+| Frontend             | HTML, CSS, JavaScript |
+| Database             | SQLite                |
+| HTTP Monitoring      | Python Requests       |
+| Containerization     | Docker                |
+| Container Management | Docker Compose        |
+| CI Automation        | Jenkins               |
+| Version Control      | Git, GitHub           |
 
 ## 🏗️ Project Architecture
 
 ```text
-                  User
-                    |
-                    v
-            CloudPulse Dashboard
-                    |
-                    v
-              Flask Backend
-                    |
-          HTTP Health Check
-                    |
-                    v
-              Test Service
-                    |
-             Docker Network
-                    |
-                    v
-             Health Response
+                 Developer
+                     |
+                     v
+                  GitHub
+                     |
+                     v
+                  Jenkins
+                     |
+             CI Pipeline Execution
+                     |
+          +----------+----------+
+          |          |          |
+       Checkout   Validation  Docker Build
+                                 |
+                                 v
+                         Docker Image
+                                 |
+                                 v
+                         CloudPulse App
+                                 |
+                          Flask Backend
+                                 |
+                          HTTP Health Check
+                                 |
+                                 v
+                            Test Service
+                                 |
+                           Docker Network
 
-              Flask Backend
-                    |
-                    v
-              SQLite Database
-               /          \
-              v            v
-          Incidents    Notifications
-              \            /
-               v          v
-             Dashboard Updates
+                         Flask Backend
+                                 |
+                                 v
+                          SQLite Database
+                            /         \
+                           v           v
+                       Incidents  Notifications
+                            \         /
+                             v       v
+                           Dashboard
 ```
 
 ### Docker Architecture
 
 - `cloudpulse` – Flask monitoring application running on port 5000.
-- `test-service` – External Flask test service running on port 5001.
+- `test-service` – Flask test service running on port 5001.
 - Both containers communicate through the Docker Compose default network.
 - CloudPulse accesses the test service using `http://test-service:5001/health`.
 
@@ -93,6 +107,14 @@ CloudPulse/
 ├── docker-compose.yml
 ├── .dockerignore
 ├── .gitignore
+├── Jenkinsfile
+├── README.md
+│
+├── screenshots/
+│   ├── dashboard.png
+│   ├── jenkins-build.png
+│   ├── docker-containers.png
+│   └── health-check.png
 │
 ├── templates/
 │   └── index.html
@@ -189,6 +211,42 @@ docker compose logs -f
 docker compose down
 ```
 
+## 🔄 Jenkins CI Pipeline
+
+Jenkins is configured to automate the CloudPulse Continuous Integration workflow using the `Jenkinsfile` stored in the GitHub repository.
+
+### Pipeline Stages
+
+1. **Checkout:** Retrieves the latest source code from GitHub.
+2. **Python Setup:** Verifies Python and installs project dependencies in a virtual environment.
+3. **Code Validation:** Checks Python syntax using `py_compile`.
+4. **Docker Environment Check:** Verifies Docker CLI and Docker Engine availability.
+5. **Docker Image Build:** Builds the CloudPulse Docker image.
+
+### CI Pipeline Result
+
+The Jenkins pipeline completed successfully.
+
+- GitHub source code checkout: Successful
+- Python environment setup: Successful
+- Python syntax validation: Successful
+- Docker environment verification: Successful
+- Docker image build: Successful
+
+### Docker Image
+
+```bash
+docker images cloudpulse
+```
+
+Image built successfully:
+
+```text
+cloudpulse:latest
+```
+
+The Jenkins-built Docker image was also manually run in a separate container and verified through the application dashboard and health endpoint.
+
 ## 🧪 Testing
 
 ### Service Health Testing
@@ -211,6 +269,38 @@ docker compose start test-service
 - Verify that the service becomes Healthy.
 - Confirm that the incident is resolved and a recovery notification appears.
 
+### Application Health Check
+
+```powershell
+Invoke-RestMethod http://localhost:5002/health
+```
+
+Expected response:
+
+```text
+message                             project
+-------                             -------
+Application is running successfully CloudPulse
+```
+
+## 📸 Project Screenshots
+
+### CloudPulse Dashboard
+
+![CloudPulse Dashboard](Images/dashboard.png)
+
+### Jenkins CI Build
+
+![Jenkins Build](Images/jenkins-build.png)
+
+### Docker Containers
+
+![Docker Containers](Images/docker-containers.png)
+
+### Application Health Check
+
+![Health Check](Images/health-check.png)
+
 ## 🔮 Future Enhancements / Roadmap
 
 - [x] Flask monitoring dashboard
@@ -220,7 +310,9 @@ docker compose start test-service
 - [x] Docker containerization
 - [x] Docker Compose
 - [x] Docker networking
-- [ ] Jenkins CI pipeline
+- [x] Jenkins CI pipeline
+- [x] Docker image build through Jenkins
+- [ ] Automated container health testing in Jenkins
 - [ ] Kubernetes deployment
 - [ ] Google Kubernetes Engine (GKE) deployment
 - [ ] Cloud monitoring integration
@@ -230,13 +322,15 @@ docker compose start test-service
 
 ## 📌 Project Status
 
-**Currently in Development**
+**Version 1 – Core Monitoring and CI Implementation Completed**
 
-CloudPulse is being developed step by step as a hands-on Cloud and DevOps learning project. New features and infrastructure integrations will be added progressively.
+The core monitoring dashboard, incident management workflow, Docker containerization, and Jenkins CI image build have been implemented and verified.
+
+Further infrastructure integrations and automated deployment features are planned for future versions.
 
 ## 👩‍💻 Author
 
 **Aditi Patil**
 
 - GitHub: https://github.com/Patil-Aditi
-- Project: https://github.com/Patil-Aditi/CloudPulse
+- Project Repository: https://github.com/Patil-Aditi/CloudPulse
