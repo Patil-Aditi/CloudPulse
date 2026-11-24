@@ -18,8 +18,8 @@ pipeline {
 
         stage('Python Setup') {
             steps {
-                bat 'py --version'
-                bat 'py -m venv .venv'
+                bat '"C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" --version'
+                bat '"C:\\Users\\VICTUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv .venv'
                 bat '.venv\\Scripts\\python.exe -m pip install -r requirements.txt'
             }
         }
